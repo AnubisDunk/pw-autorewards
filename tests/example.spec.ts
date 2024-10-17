@@ -1,45 +1,49 @@
 import { test, expect } from '@playwright/test';
 
+const email = process.env.EMAIL as string;
+const pass = process.env.PASSWORD as string;
+const rwUrl = process.env.RURL as string;
+const bUrl = process.env.BURL as string;
+const sTitle = process.env.STITLE as string;
+const mrTitle = process.env.MRTITLE as string;
 
 test('has title', async ({ page }) => {
 
-  await page.goto('https://rewards.bing.com/');
-  await expect(page).toHaveTitle("Sign in to Microsoft Rewards");
+  await page.goto(rwUrl);
+  await expect(page).toHaveTitle(sTitle);
 
   const loginField = page.getByTestId('i0116');
   const passField = page.getByTestId('i0118');
 
 
-  await loginField.fill("soldermain69@outlook.com");
+  await loginField.fill(email);
   await loginField.press('Enter');
-  await passField.fill("fervexSOLDER");
+  await passField.fill(pass);
   await passField.press('Enter');
   await expect(page).toHaveTitle("Stay signed in?");
   await page.locator('#declineButton').click();
-  await expect(page).toHaveTitle("Microsoft Rewards");
+  await expect(page).toHaveTitle(mrTitle);
 
-  //await expect(page.locator('.c-card-content a').first()).toBeVisible();
   const rewards = page.locator('.c-card-content a');
 
   for (let i = 0; i < 2; i++) {
     await rewards.nth(i).click();
-    //console.log("Reward");
   }
 
 });
 
 test('execute 60 searches', async ({ page }) => {
   test.slow();
-  await page.goto('https://bing.com/');
+  await page.goto(bUrl);
   await page.locator('#bnp_btn_accept').click();
   const search = page.locator('#sb_form_q');
   const loginField = page.getByTestId('i0116');
   const passField = page.getByTestId('i0118');
   await page.locator('#id_l').click();
   await page.locator('#b_idProviders li a').first().click();
-  await loginField.fill("soldermain69@outlook.com");
+  await loginField.fill(email);
   await loginField.press('Enter');
-  await passField.fill("fervexSOLDER");
+  await passField.fill(pass);
   await passField.press('Enter');
   await expect(page).toHaveTitle("Stay signed in?");
   await page.locator('#declineButton').click();
